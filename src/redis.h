@@ -891,7 +891,7 @@ struct redisServer {
     mode_t unixsocketperm;      /* UNIX socket permission */
 
     // 描述符
-    int ipfd[REDIS_BINDADDR_MAX]; /* TCP socket file descriptors */
+    int ipfd[REDIS_BINDADDR_MAX]; /* TCP listen socket file descriptors */
     // 描述符数量
     int ipfd_count;             /* Used slots in ipfd[] */
 

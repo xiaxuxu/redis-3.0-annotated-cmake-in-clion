@@ -357,7 +357,7 @@ int aeDeleteTimeEvent(aeEventLoop *eventLoop, long long id)
  *    Much better but still insertion or deletion of timers is O(N).
  * 2) Use a skiplist to have this operation as O(1) and insertion as O(log(N)).
  */
-// 寻找里目前时间最近的时间事件
+// 寻找里目前时间最近的时间事件 , traverse the list and find time is smallest
 // 因为链表是乱序的，所以查找复杂度为 O（N）
 static aeTimeEvent *aeSearchNearestTimer(aeEventLoop *eventLoop)
 {
@@ -571,7 +571,7 @@ int aeProcessEvents(aeEventLoop *eventLoop, int flags)
              * processed, so we check if the event is still valid. */
             // 读事件
             if (fe->mask & mask & AE_READABLE) {
-                // rfired 确保读/写事件只能执行其中一个
+                // rfired 确保读/写事件只能执行其中一个 todo why???
                 rfired = 1;
                 fe->rfileProc(eventLoop,fd,fe->clientData,mask);
             }

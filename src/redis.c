@@ -1568,7 +1568,7 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 // 每次处理事件之前执行
 void beforeSleep(struct aeEventLoop *eventLoop) {
     REDIS_NOTUSED(eventLoop);
-
+//    redisLog(0, "beforeSleep is invoked ");
     /* Run a fast expire cycle (the called function will return
      * ASAP if a fast cycle is not needed). */
     // 执行一次快速的主动过期检查
@@ -4065,6 +4065,7 @@ int main(int argc, char **argv) {
         if (server.sofd > 0)
             redisLog(REDIS_NOTICE,"The server is now ready to accept connections at %s", server.unixsocket);
     } else {
+        //sentiel mode
         sentinelIsRunning();
     }
 
