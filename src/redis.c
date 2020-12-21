@@ -904,7 +904,7 @@ void activeExpireCycle(int type) {
      * microseconds we can spend in this function. */
     // 函数处理的微秒时间上限
     // ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC 默认为 25 ，也即是 25 % 的 CPU 时间
-    timelimit = 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100;
+    timelimit = 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100;//timelimt 是一个hz时间内的时间，25% * 1hz时间
     timelimit_exit = 0;
     if (timelimit <= 0) timelimit = 1;
 
@@ -1169,9 +1169,6 @@ void clientsCron(void) {
      *
      * 这个函数每次执行都会处理至少 1/server.hz*10 个客户端。
      *
-     * Since this function is called server.hz times per second we are sure that
-     * in the worst case we process all the clients in 10 seconds.
-     *
      * 因为这个函数每秒钟会调用 server.hz 次，
      * 所以在最坏情况下，服务器需要使用 10 秒钟来遍历所有客户端。
      *
@@ -1309,16 +1306,13 @@ void updateCachedTime(void) {
  *   复制重连
  *
  * - Many more...
- *   等等。。。
- *
- * Everything directly called here will be called server.hz times per second,
- * so in order to throttle execution of things we want to do less frequently
- * a macro is used: run_with_period(milliseconds) { .... }
+ *   等等。。。server.hz
  *
  * 因为 serverCron 函数中的所有代码都会每秒调用 server.hz 次，
  * 为了对部分代码的调用次数进行限制，
  * 使用了一个宏 run_with_period(milliseconds) { ... } ，
  * 这个宏可以将被包含代码的执行次数降低为每 milliseconds 执行一次。
+ * 默认是 100ms 进来一次
  */
 
 int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
@@ -2155,7 +2149,7 @@ void initServer() {
 
     /* Create an event handler for accepting new connections in TCP and Unix
      * domain sockets. */
-    // 为 TCP 连接关联连接应答（accept）处理器
+    // 为 TCP 连接关联连接应答（accept）处理器,ipfd 里面是监听的文件描述符
     // 用于接受并应答客户端的 connect() 调用
     for (j = 0; j < server.ipfd_count; j++) {
         if (aeCreateFileEvent(server.el, server.ipfd[j], AE_READABLE,
@@ -3932,7 +3926,6 @@ void redisSetProcTitle(char *title) {
 
 int main(int argc, char **argv) {
     struct timeval tv;
-
     /* We need to initialize our libraries, and the server configuration. */
     // 初始化库
 #ifdef INIT_SETPROCTITLE_REPLACEMENT
@@ -3942,7 +3935,7 @@ int main(int argc, char **argv) {
     zmalloc_enable_thread_safeness();
     zmalloc_set_oom_handler(redisOutOfMemoryHandler);
     srand(time(NULL)^getpid());
-    gettimeofday(&tv,NULL);
+    gettimeofday(&tv,NULL);//获取微秒级别的时间戳
     dictSetHashFunctionSeed(tv.tv_sec^tv.tv_usec^getpid());
 
     // 检查服务器是否以 Sentinel 模式启动

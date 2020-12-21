@@ -143,7 +143,7 @@ typedef struct dict {
     // 哈希表
     dictht ht[2];
 
-    // rehash 索引
+    // rehash 索引，被 rehash 的 hashtable 的 索引
     // 当 rehash 不在进行时，值为 -1
     int rehashidx; /* rehashing not in progress if rehashidx == -1 */
 

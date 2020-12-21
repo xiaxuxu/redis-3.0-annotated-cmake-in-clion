@@ -1,3 +1,8 @@
+### 知识点
+怎么让一个进行 daemoize
+dup2的用法
+
+
 # CLion调试redis源码
 
 ## 背景

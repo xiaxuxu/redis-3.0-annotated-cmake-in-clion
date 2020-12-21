@@ -1,3 +1,3 @@
-#define REDIS_GIT_SHA1 "1ce33fe5"
-#define REDIS_GIT_DIRTY "445"
-#define REDIS_BUILD_ID "ubuntu-1607841359"
+#define REDIS_GIT_SHA1 "3a503bd9"
+#define REDIS_GIT_DIRTY "113"
+#define REDIS_BUILD_ID "x-1608398695"

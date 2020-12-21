@@ -264,7 +264,7 @@ int dictResize(dict *d)
 }
 
 /* Expand or create the hash table */
-/*
+/* rehash 的前奏
  * 创建一个新的哈希表，并根据字典的情况，选择以下其中一个动作来进行：
  *
  * 1) 如果字典的 0 号哈希表为空，那么将新哈希表设置为 0 号哈希表
@@ -348,8 +348,6 @@ int dictExpand(dict *d, unsigned long size)
  * 注意，每步 rehash 都是以一个哈希表索引（桶）作为单位的，
  * 一个桶里可能会有多个节点，
  * 被 rehash 的桶里的所有节点都会被移动到新哈希表。
- *
- * T = O(N)
  */
 int dictRehash(dict *d, int n) {
 
